@@ -149,4 +149,3 @@ def mouse_video_loader(
             dataloaders_combined[k][dataset_name] = v
 
     return dataloaders_combined
-    

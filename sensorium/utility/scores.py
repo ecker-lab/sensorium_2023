@@ -41,7 +41,7 @@ def model_predictions(model, dataloader, data_key, device="cpu"):
             if not isinstance(batch, dict)
             else (batch["inputs"], batch["targets"])
         )
-        
+
         batch_kwargs = batch._asdict() if not isinstance(batch, dict) else batch
         with torch.no_grad():
             with device_state(model, device):
@@ -57,7 +57,7 @@ def model_predictions(model, dataloader, data_key, device="cpu"):
                     dim=0,
                 )
             target = torch.cat((target, responses.detach().cpu()), dim=0)
-            
+
     if target.shape != output.shape:
         target = target.transpose(2, 1)
         time_left = output.shape[1]
@@ -66,7 +66,13 @@ def model_predictions(model, dataloader, data_key, device="cpu"):
 
 
 def get_correlations(
-    model, dataloaders, tier=None, device="cpu", as_dict=False, per_neuron=True, **kwargs
+    model,
+    dataloaders,
+    tier=None,
+    device="cpu",
+    as_dict=False,
+    per_neuron=True,
+    **kwargs
 ):
     """
     Computes single-trial correlation between model prediction and true responses
@@ -147,7 +153,15 @@ def get_signal_correlations(
     return correlations if per_neuron else correlations.mean()
 
 
-def get_fev(model, dataloaders, tier, device="cpu", per_neuron=True, fev_threshold=0.15, as_dict=False):
+def get_fev(
+    model,
+    dataloaders,
+    tier,
+    device="cpu",
+    per_neuron=True,
+    fev_threshold=0.15,
+    as_dict=False,
+):
     """
     Compute the fraction of explainable variance explained per neuron.
     Args:

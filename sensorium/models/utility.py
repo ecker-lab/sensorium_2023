@@ -34,4 +34,3 @@ def prepare_grid(grid_mean_predictor, dataloaders):
                 for k, v in dataloaders.items()
             }
     return grid_mean_predictor, grid_mean_predictor_type, source_grids
-    
