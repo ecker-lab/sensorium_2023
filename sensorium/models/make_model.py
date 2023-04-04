@@ -11,6 +11,7 @@ from neuralpredictors.layers.cores import (
 
 from .readouts import MultipleFullGaussian2d, MultipleFullFactorized2d
 from .utility import prepare_grid
+from neuralpredictors.utils import get_module_output
 
 # imports for 3d cores and gru
 from neuralpredictors.layers.cores.vcores import Basic3dCore, Factorized3dCore
@@ -18,7 +19,19 @@ from neuralpredictors.layers.rnn_modules.gru_module import GRU_Module
 from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
 
 
-def stacked_factorised_video_core_full_gauss_readout(
+def check_hidden_channels(core_dict):
+    if isinstance(core_dict["hidden_channels"], list):
+        assert (
+            len(core_dict["hidden_channels"]) == core_dict["layers"]
+        ), f"Hidden channels list should have same length {len(core_dict['hidden_channels'])} as layers ({core_dict['layers']})"
+    elif isinstance(core_dict["hidden_channels"], int):
+        core_dict["hidden_channels"] = [core_dict["hidden_channels"]] * core_dict[
+            "layers"
+        ]
+    return core_dict
+
+
+def make_video_model(
     dataloaders,
     seed,
     core_dict,
@@ -79,39 +92,76 @@ def stacked_factorised_video_core_full_gauss_readout(
     set_random_seed(seed)
 
     if core_type == "2D_equivariant":
-        core = RotationEquivariant2dCore(core_dict)
+        core = RotationEquivariant2dCore(**core_dict)
     elif core_type == "2D":
-        core = Stacked2dCore(core_dict)
+        core = Stacked2dCore(**core_dict)
     elif core_type == "3D_factorised":
-        core = Factorized3dCore(core_dict)
+        core_dict = check_hidden_channels(core_dict)
+        core = Factorized3dCore(**core_dict)
     elif core_type == "3D":
-        core = Basic3dCore(core_dict)
+        if core_dict["spatial_input_kernel"] is not None:
+            core_dict["input_kernel"] = (
+                core_dict["in_channels"],
+                core_dict["spatial_input_kernel"],
+                core_dict["spatial_input_kernel"],
+            )
+        else:
+            core_dict["input_kernel"] = (
+                core_dict["num_frames"],
+                core_dict["input_kernel"],
+                core_dict["input_kernel"],
+            )
+
+        core_dict["hidden_kernel"] = (
+            core_dict["num_frames"],
+            core_dict["hidden_kernel"],
+            core_dict["hidden_kernel"],
+        )
+
+        del core_dict["num_frames"]
+        del core_dict["spatial_input_kernel"]
+        core_dict = check_hidden_channels(core_dict)
+        core = Basic3dCore(**core_dict)
     else:
         raise NotImplementedError(f"core type {core_type} is not implemented")
 
-    in_shapes_dict = {
-        k: ((core.hidden_channels[-1],) + core.get_output_shape(v[in_name])[2:])
-        for k, v in session_shape_dict.items()
-    }
+    if "3D" in core_type:
+        in_shapes_dict = {
+            k: ((core.hidden_channels[-1],) + core.get_output_shape(v[in_name])[2:])
+            for k, v in session_shape_dict.items()
+        }
+    else:
+        session_shape_dict_2d = {
+            k: torch.Size([v[in_name][0] * v[in_name][2], v[in_name][1]])
+            + v[in_name][3:]
+            for k, v in session_shape_dict.items()
+        }
+
+        in_shapes_dict = {
+            k: get_module_output(core, v)[1:] for k, v in session_shape_dict_2d.items()
+        }
 
     mean_activity_dict = {
-        k: next(iter(data_loaders[k]))[1].mean(0).mean(-1) for k in data_loaders.keys()
+        k: next(iter(dataloaders[k]))[1].mean(0).mean(-1) for k in dataloaders.keys()
     }
 
-    readout_dict["in_shapes_dict"] = in_shapes_dict
+    readout_dict["in_shape_dict"] = in_shapes_dict
+    readout_dict["n_neurons_dict"] = n_neurons_dict
+    readout_dict["loaders"] = dataloaders
+
     if readout_type == "gaussian":
         grid_mean_predictor, grid_mean_predictor_type, source_grids = prepare_grid(
-            grid_mean_predictor, dataloaders
+            readout_dict["grid_mean_predictor"], dataloaders
         )
+
         readout_dict["mean_activity_dict"] = mean_activity_dict
-        readout_dict["grid_mean_predictor"] = (grid_mean_predictor,)
-        readout_dict["grid_mean_predictor_type"] = (grid_mean_predictor_type,)
+        readout_dict["grid_mean_predictor"] = grid_mean_predictor
+        readout_dict["grid_mean_predictor_type"] = grid_mean_predictor_type
         readout_dict["source_grids"] = source_grids
         readout = MultipleFullGaussian2d(**readout_dict)
 
     elif readout_type == "factorised":
-        n_neurons_dict = {k: v[out_name][1] for k, v in session_shape_dict.items()}
-        if readout_dict["readout_bias"]:
+        if readout_dict["bias"]:
             mean_activity_dict = {}
             for key, value in dataloaders.items():
                 _, targets = next(iter(value))[:2]
@@ -119,7 +169,6 @@ def stacked_factorised_video_core_full_gauss_readout(
             readout_dict["mean_activity_dict"] = mean_activity_dict
         else:
             readout_dict["mean_activity_dict"] = None
-        readout_dict["n_neurons_dict"] = n_neurons_dict
         readout = MultipleFullFactorized2d(**readout_dict)
     else:
         raise NotImplementedError(f"readout type {readout_type} is not implemented")

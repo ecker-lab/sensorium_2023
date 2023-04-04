@@ -277,11 +277,6 @@ def standard_trainer(
         print(
             f"Epoch {epoch}, Batch {batch_no}, Train loss {loss}, Validation loss {val_loss}"
         )
-        #         if use_wandb:
-        #             wandb.log({"Batch Train loss": loss,
-        #                        "Batch Validation loss": val_loss,
-        #                        "Batch": batch_no_tot,
-        #                        "Epoch": epoch})
         print(f"EPOCH={epoch}  validation_correlation={validation_correlation}")
 
         if use_wandb:
