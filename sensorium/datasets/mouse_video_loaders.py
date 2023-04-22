@@ -36,7 +36,6 @@ def mouse_video_loader(
     include_pupil_centers=True,
     include_pupil_centers_as_channels=False,
     scale=1,
-    float64=False,
 ):
     """
     Symplified version of the sensorium mouse_loaders.py
@@ -73,7 +72,7 @@ def mouse_video_loader(
     dataloaders_combined = {"validation": {}, "train": {}, "test": {}}
 
     for path in paths:
-        dat2 = MovieFileTreeDataset(path, *data_keys, float64=float64)
+        dat2 = MovieFileTreeDataset(path, *data_keys)
 
         conds = np.ones(len(dat2.neurons.cell_motor_coordinates), dtype=bool)
         idx = np.where(conds)[0]

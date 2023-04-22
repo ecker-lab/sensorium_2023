@@ -183,7 +183,6 @@ def standard_trainer(
     for epoch, val_obj in early_stopping(
         model,
         stop_closure,
-        scheduler_method="ReduceLROnPlateau",
         interval=interval,
         patience=patience,
         start=epoch,
@@ -193,7 +192,6 @@ def standard_trainer(
         restore_best=restore_best,
         scheduler=scheduler,
         lr_decay_steps=lr_decay_steps,
-        warmup=False,
     ):
         # executes callback function if passed in keyword args
         if cb is not None:
@@ -222,28 +220,8 @@ def standard_trainer(
                 detach_core=detach_core,
             )
             loss.backward()
-            #             loss.backward(retain_graph=True)
 
-            epoch_loss += loss.detach()  # - this worked
-
-            #             if batch_no % print_step == 0:
-            #                 with torch.no_grad() :
-            #                     val_loss = full_objective(
-            #                         model,
-            #                         dataloaders["validation"],
-            #                         data_key,
-            #                         *batch_args,
-            #                         **batch_kwargs,
-            #                         detach_core=detach_core
-            #                     )
-            #                     epoch_val_loss += val_loss
-            #                     print(f"Epoch {epoch}, Batch {batch_no}, Train loss {loss}, Validation loss {val_loss}")
-            #                     if use_wandb:
-            #                         wandb.log({"Batch Train loss": loss,
-            #                                    "Batch Validation loss": val_loss,
-            #                                    "Batch": batch_no_tot,
-            #                                    "Epoch": epoch})
-
+            epoch_loss += loss.detach()
             if (batch_no + 1) % optim_step_count == 0:
                 optimizer.step()
 

@@ -14,7 +14,7 @@ from .utility import prepare_grid
 from neuralpredictors.utils import get_module_output
 
 # imports for 3d cores and gru
-from neuralpredictors.layers.cores.vcores import Basic3dCore, Factorized3dCore
+from neuralpredictors.layers.cores.conv3d import Basic3dCore, Factorized3dCore
 from neuralpredictors.layers.rnn_modules.gru_module import GRU_Module
 from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
 
