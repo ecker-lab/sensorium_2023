@@ -1,11 +1,12 @@
 import os
+
+import numpy as np
 import pandas as pd
 import torch
-import numpy as np
-
 from nnfabrik.builder import get_data
-from neuralpredictors.training import eval_state, device_state
+
 from neuralpredictors.data.datasets import FileTreeDataset
+from neuralpredictors.training import device_state, eval_state
 
 
 def model_predictions(model, dataloader, data_key, device="cpu"):

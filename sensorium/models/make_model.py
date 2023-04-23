@@ -1,21 +1,21 @@
-from torch import nn
+from operator import itemgetter
+
 import torch
-from nnfabrik.utility.nn_helpers import set_random_seed, get_dims_for_loader_dict
-from neuralpredictors.utils import get_module_output
-from .video_encoder import VideoFiringRateEncoder
-from neuralpredictors.layers.cores import (
-    Stacked2dCore,
-    RotationEquivariant2dCore,
-)
+from nnfabrik.utility.nn_helpers import (get_dims_for_loader_dict,
+                                         set_random_seed)
+from torch import nn
 
-from .readouts import MultipleFullGaussian2d, MultipleFullFactorized2d
-from .utility import prepare_grid
-
+from neuralpredictors.layers.cores import (RotationEquivariant2dCore,
+                                           Stacked2dCore)
 # imports for 3d cores and gru
 from neuralpredictors.layers.cores.conv3d import Basic3dCore, Factorized3dCore
 from neuralpredictors.layers.rnn_modules.gru_module import GRU_Module
 from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
-from operator import itemgetter
+from neuralpredictors.utils import get_module_output
+
+from .readouts import MultipleFullFactorized2d, MultipleFullGaussian2d
+from .utility import prepare_grid
+from .video_encoder import VideoFiringRateEncoder
 
 
 def make_video_model(

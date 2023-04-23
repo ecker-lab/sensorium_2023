@@ -1,9 +1,10 @@
 import warnings
+
 import numpy as np
 import torch
 
 from neuralpredictors.measures.np_functions import corr, fev
-from neuralpredictors.training import eval_state, device_state
+from neuralpredictors.training import device_state, eval_state
 
 from .submission import get_data_filetree_loader
 

@@ -1,24 +1,17 @@
 import numpy as np
+from nnfabrik.utility.nn_helpers import (get_dims_for_loader_dict,
+                                         set_random_seed)
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
+
 from neuralpredictors.data.datasets import MovieFileTreeDataset
-
-from neuralpredictors.data.transforms import (
-    Subsample,
-    ToTensor,
-    NeuroNormalizer,
-    ExpandChannels,
-    AddBehaviorAsChannels,
-    SelectInputChannel,
-    ScaleInputs,
-    AddPupilCenterAsChannels,
-    CutVideos,
-    ChangeChannelsOrder,
-    Subsequence,
-)
-
 from neuralpredictors.data.samplers import SubsetSequentialSampler
-from nnfabrik.utility.nn_helpers import set_random_seed, get_dims_for_loader_dict
+from neuralpredictors.data.transforms import (AddBehaviorAsChannels,
+                                              AddPupilCenterAsChannels,
+                                              ChangeChannelsOrder, CutVideos,
+                                              ExpandChannels, NeuroNormalizer,
+                                              ScaleInputs, SelectInputChannel,
+                                              Subsample, Subsequence, ToTensor)
 
 
 def mouse_video_loader(
@@ -69,9 +62,9 @@ def mouse_video_loader(
     if include_pupil_centers:
         data_keys.append("pupil_center")
 
-#     dataloaders_combined = {"validation": {}, "train": {}, "test": {}}
+    #     dataloaders_combined = {"validation": {}, "train": {}, "test": {}}
     dataloaders_combined = {}
-    
+
     for path in paths:
         dat2 = MovieFileTreeDataset(path, *data_keys)
 
