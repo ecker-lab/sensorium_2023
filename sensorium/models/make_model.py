@@ -3,7 +3,6 @@ import torch
 from nnfabrik.utility.nn_helpers import set_random_seed, get_dims_for_loader_dict
 from neuralpredictors.utils import get_module_output
 from .video_encoder import VideoFiringRateEncoder
-from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
 from neuralpredictors.layers.cores import (
     Stacked2dCore,
     RotationEquivariant2dCore,
@@ -11,24 +10,12 @@ from neuralpredictors.layers.cores import (
 
 from .readouts import MultipleFullGaussian2d, MultipleFullFactorized2d
 from .utility import prepare_grid
-from neuralpredictors.utils import get_module_output
 
 # imports for 3d cores and gru
 from neuralpredictors.layers.cores.conv3d import Basic3dCore, Factorized3dCore
 from neuralpredictors.layers.rnn_modules.gru_module import GRU_Module
 from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
-
-
-def check_hidden_channels(core_dict):
-    if isinstance(core_dict["hidden_channels"], list):
-        assert (
-            len(core_dict["hidden_channels"]) == core_dict["layers"]
-        ), f"Hidden channels list should have same length {len(core_dict['hidden_channels'])} as layers ({core_dict['layers']})"
-    elif isinstance(core_dict["hidden_channels"], int):
-        core_dict["hidden_channels"] = [core_dict["hidden_channels"]] * core_dict[
-            "layers"
-        ]
-    return core_dict
+from operator import itemgetter
 
 
 def make_video_model(
@@ -96,7 +83,6 @@ def make_video_model(
     elif core_type == "2D":
         core = Stacked2dCore(**core_dict)
     elif core_type == "3D_factorised":
-        core_dict = check_hidden_channels(core_dict)
         core = Factorized3dCore(**core_dict)
     elif core_type == "3D":
         if core_dict["spatial_input_kernel"] is not None:
@@ -120,14 +106,14 @@ def make_video_model(
 
         del core_dict["num_frames"]
         del core_dict["spatial_input_kernel"]
-        core_dict = check_hidden_channels(core_dict)
         core = Basic3dCore(**core_dict)
     else:
         raise NotImplementedError(f"core type {core_type} is not implemented")
 
     if "3D" in core_type:
+        subselect = itemgetter(0, 2, 3)
         in_shapes_dict = {
-            k: ((core.hidden_channels[-1],) + core.get_output_shape(v[in_name])[2:])
+            k: subselect(tuple(get_module_output(core, v[in_name])[1:]))
             for k, v in session_shape_dict.items()
         }
     else:

@@ -127,7 +127,7 @@ def standard_trainer(
     criterion = getattr(modules, loss_function)(avg=avg_loss)
     stop_closure = partial(
         getattr(scores, stop_function),
-        dataloaders=dataloaders["validation"],
+        dataloaders=dataloaders["oracle"],
         device=device,
         per_neuron=False,
         avg=True,
@@ -239,14 +239,14 @@ def standard_trainer(
 
         validation_correlation = get_correlations(
             model,
-            dataloaders["validation"],
+            dataloaders["oracle"],
             device=device,
             as_dict=False,
             per_neuron=False,
         )
         val_loss = full_objective(
             model,
-            dataloaders["validation"],
+            dataloaders["oracle"],
             data_key,
             *batch_args,
             **batch_kwargs,
@@ -276,7 +276,7 @@ def standard_trainer(
 
     # Compute avg validation and test correlation
     validation_correlation = get_correlations(
-        model, dataloaders["validation"], device=device, as_dict=False, per_neuron=False
+        model, dataloaders["oracle"], device=device, as_dict=False, per_neuron=False
     )
     print(f"\n\n FINAL validation_correlation {validation_correlation} \n\n")
 

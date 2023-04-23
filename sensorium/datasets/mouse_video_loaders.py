@@ -69,8 +69,9 @@ def mouse_video_loader(
     if include_pupil_centers:
         data_keys.append("pupil_center")
 
-    dataloaders_combined = {"validation": {}, "train": {}, "test": {}}
-
+#     dataloaders_combined = {"validation": {}, "train": {}, "test": {}}
+    dataloaders_combined = {}
+    
     for path in paths:
         dat2 = MovieFileTreeDataset(path, *data_keys)
 
@@ -145,6 +146,8 @@ def mouse_video_loader(
 
         dataset_name = path.split("/")[-2]
         for k, v in dataloaders.items():
+            if k not in dataloaders_combined.keys():
+                dataloaders_combined[k] = {}
             dataloaders_combined[k][dataset_name] = v
 
     return dataloaders_combined
