@@ -55,7 +55,9 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 <br>[**Model tutorial**](notebooks/model_demo.ipynb): How to train and evaluate our baseline models and even more models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
 
-If you do not want to use API for the competition submission, please provide 2 '.csv' for live and final test, which contains 2 columns: 'mouse' with the session name, 'file_name' (like '1.npy') and 'predictions', where each entity in the predictions column is a list of lists with shape = (number or neurons, 250), where 250 is the last 250 frames for the video. 
+# Submission comments
+
+If you do not want to use API for the competition submission, please provide 2 '.csv' for live and final test, which contains 3 columns: `mouse` with the session name, `file_name` (like '1.npy') and `predictions`, where each entity in the predictions column is a list of lists with shape = (number or neurons, 250), where 250 is the last 250 frames for the video. 
 
 If you use pandas, please save the csv like this:
 
