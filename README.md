@@ -70,7 +70,7 @@ data = [
 
 
 df = pd.DataFrame.from_records(data, columns =['mouse', 'file_name', 'predictions'])
-df.to_csv('/home/apaliwal/ayush_april/notebooks/trial.csv', encoding='utf8', index=False)
+df.to_csv('path/**.csv', encoding='utf8', index=False)
 ```
 
 If you have any questions, feel free to reach out to us (Contact section on our [website](http://sensorium-competition.net/)), or raise an issue here on GitHub!
