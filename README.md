@@ -55,7 +55,20 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 <br>[**Model tutorial**](notebooks/model_demo.ipynb): How to train and evaluate our baseline models and even more models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
 
-If you do not want to use API for the competition submission, please provide 2 '.csv' for live and final test, which contains 2 columns: 'file_name' (like '1.npy') and 'predictions', where each entity in the predictions column is a `np.array` with shape = (number or neurons, 250), where 250 is the last 250 frames for the video. 
+If you do not want to use API for the competition submission, please provide 2 '.csv' for live and final test, which contains 2 columns: 'mouse' with the session name, 'file_name' (like '1.npy') and 'predictions', where each entity in the predictions column is a list of lists with shape = (number or neurons, 250), where 250 is the last 250 frames for the video. 
 
+If you use pandas, please save the csv like this:
+
+```
+data = [
+    ('mouse1', '1.npy', np.random.random((8000, 250)).tolist()),
+    ('mouse1', '2.npy', np.random.random((8000, 250)).tolist()),
+    ('mouse1', '3.npy', np.random.random((8000, 250)).tolist()),
+]
+
+
+df = pd.DataFrame.from_records(data, columns =['mouse', 'file_name', 'predictions'])
+df.to_csv('/home/apaliwal/ayush_april/notebooks/trial.csv', encoding='utf8', index=False)
+```
 
 If you have any questions, feel free to reach out to us (Contact section on our [website](http://sensorium-competition.net/)), or raise an issue here on GitHub!
