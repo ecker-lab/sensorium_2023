@@ -49,6 +49,7 @@ def standard_trainer(
     save_checkpoints=True,
     checkpoint_save_path="local/",
     chpt_save_step=15,
+    deeplake_ds=False,
     **kwargs,
 ):
     """
@@ -97,7 +98,10 @@ def standard_trainer(
             regularizers = int(not detach_core) * sum(
                 model.core.regularizer()
             ) + model.readout.regularizer(data_key)
-
+        if deeplake_ds:
+            for k in kwargs.keys():
+                if k not in ['id', 'index']:
+                    kwargs[k] = torch.Tensor(np.asarray(kwargs[k])).to(device) 
         model_output = model(args[0].to(device), data_key=data_key, **kwargs)
         time_left = model_output.shape[1]
 
@@ -124,6 +128,7 @@ def standard_trainer(
         device=device,
         per_neuron=False,
         avg=True,
+        deeplake_ds=deeplake_ds,
     )
 
     n_iterations = len(LongCycler(dataloaders["train"]))

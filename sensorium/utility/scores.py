@@ -15,14 +15,17 @@ def model_predictions(model, dataloader, data_key, device="cpu", skip=50, deepla
 
     target, output = [], []
     for batch in dataloader:
-        ## TODO - add deeplake
         images, responses = (
             batch[:2]
             if not isinstance(batch, dict)
-            else (batch["inputs"], batch["targets"])
+            else (batch["videos"], batch["responses"])
         )
 
         batch_kwargs = batch._asdict() if not isinstance(batch, dict) else batch
+        if deeplake_ds:
+            for k in batch_kwargs.keys():
+                if k not in ['id', 'index']:
+                    batch_kwargs[k] = torch.Tensor(np.asarray(batch_kwargs[k])).to(device) 
         with torch.no_grad():
             resp = responses.detach().cpu()[:, :, skip:]
             target = target + list(resp)
