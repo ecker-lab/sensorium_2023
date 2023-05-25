@@ -51,26 +51,31 @@ now, type in `localhost:10101` in your favorite browser, and you are ready to go
 
 <!-- ## **Competition example notebooks** -->
 We provide notebooks that illustrate the structure of our data, our baselines models, and how to make a submission to the competition.
-<!-- <br>[**Dataset tutorial**](notebooks/model_demo.ipynb): Shows the structure of the data and how to turn it into a PyTorch DataLoader. -->
+<br>[**Dataset tutorial**](notebooks/load_data_demo.ipynb): Shows the structure of the data and how to turn it into a PyTorch DataLoader.
 <br>[**Model tutorial**](notebooks/model_demo.ipynb): How to train and evaluate our baseline models and even more models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
 
 ## Submission comments
 
-If you do not want to use API for the competition submission, please provide 2 '.csv' for live and final test, which contains 3 columns: `mouse` with the session name, `file_name` (like '1.npy') and `predictions`, where each entity in the predictions column is a list of lists with shape = (number or neurons, 250), where 250 is the last 250 frames for the video. 
+Participants should submit a zip file with 2 files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test correspondingly. For the bonus track please replace `main` with `ood` like this : `predictions_final_ood.parquet.brotli`. 
 
-If you use pandas, please save the csv like this:
+If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `predictions`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions.
+
+If you use pandas, here is a toy example how to save the data:
 
 ```
 data = [
-    ('mouse1', '1.npy', np.random.random((8000, 250)).tolist()),
-    ('mouse1', '2.npy', np.random.random((8000, 250)).tolist()),
-    ('mouse1', '3.npy', np.random.random((8000, 250)).tolist()),
+    ('mouse1', '1.npy', np.random.random((8000, 250)).tolist(), [1,2,3]),
+    ('mouse1', '2.npy', np.random.random((8000, 250)).tolist(), [1,2,3]),
+    ('mouse1', '3.npy', np.random.random((8000, 250)).tolist(), [1,2,3]),
 ]
 
 
-df = pd.DataFrame.from_records(data, columns =['mouse', 'file_name', 'predictions'])
-df.to_csv('path/**.csv', encoding='utf8', index=False)
+df = pd.DataFrame.from_records(data, columns =['mouse', 'trial_indices', 'predictions', 'neuron_ids'])
+df = pd.concat(dataframes_pred, ignore_index=True)
+submission_filename = f"predictions_file_{tier}_{track}_track.parquet.brotli"
+save_path = os.path.join(path, submission_filename) if path is not None else submission_filename
+df.to_parquet(save_path, compression='brotli', engine='pyarrow', index=False)
 ```
 
 If you have any questions, feel free to reach out to us (Contact section on our [website](http://sensorium-competition.net/)), or raise an issue here on GitHub!
