@@ -1,6 +1,4 @@
 import numpy as np
-from nnfabrik.utility.nn_helpers import (get_dims_for_loader_dict,
-                                         set_random_seed)
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 
@@ -29,6 +27,8 @@ def mouse_video_loader(
     include_pupil_centers=True,
     include_pupil_centers_as_channels=False,
     scale=1,
+    to_cut=True,
+    exclude_beh_channels=None,
 ):
     """
     Symplified version of the sensorium mouse_loaders.py
@@ -82,18 +82,23 @@ def mouse_video_loader(
             ChangeChannelsOrder((1, 0), in_name="responses"),
             ChangeChannelsOrder((1, 0), in_name="behavior"),
             ChangeChannelsOrder((1, 0), in_name="pupil_center"),
-            Subsequence(frames=frames, channel_first=(), offset=offset),
+        ]
+        if to_cut:
+            more_transforms.append(
+                Subsequence(frames=frames, channel_first=(), offset=offset)
+            )
+        more_transforms = more_transforms + [
             ChangeChannelsOrder((1, 0), in_name="responses"),
             ChangeChannelsOrder((1, 0), in_name="behavior"),
             ChangeChannelsOrder((1, 0), in_name="pupil_center"),
             ExpandChannels("videos"),
         ]
-        # scale = (0.25, 0.25, 1)
-        # more_transforms = [ToTensor(cuda)]
+        
         if include_behavior:
-            more_transforms.append(AddBehaviorAsChannels("videos"))
+            more_transforms.append(AddBehaviorAsChannels("videos", exclude_beh_channels=exclude_beh_channels))
         if include_pupil_centers and include_pupil_centers_as_channels:
             more_transforms.append(AddPupilCenterAsChannels("videos"))
+        
         more_transforms.append(ToTensor(cuda))
         more_transforms.insert(
             0, ScaleInputs(scale=scale, in_name="videos", channel_axis=-1)

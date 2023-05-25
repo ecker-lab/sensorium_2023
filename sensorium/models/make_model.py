@@ -1,10 +1,7 @@
 from operator import itemgetter
-
 import torch
-from nnfabrik.utility.nn_helpers import (get_dims_for_loader_dict,
-                                         set_random_seed)
+from nnfabrik.utility.nn_helpers import set_random_seed
 from torch import nn
-
 from neuralpredictors.layers.cores import (RotationEquivariant2dCore,
                                            Stacked2dCore)
 # imports for 3d cores and gru
@@ -14,7 +11,7 @@ from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
 from neuralpredictors.utils import get_module_output
 
 from .readouts import MultipleFullFactorized2d, MultipleFullGaussian2d
-from .utility import prepare_grid
+from .utility import prepare_grid, get_dims_for_loader_dict
 from .video_encoder import VideoFiringRateEncoder
 
 
@@ -33,6 +30,7 @@ def make_video_model(
     elu_offset=0.0,
     nonlinearity_type="elu",
     nonlinearity_config=None,
+    deeplake_ds=False,
 ):
     """
     Model class of a stacked2dCore (from neuralpredictors) and a pointpooled (spatial transformer) readout
@@ -66,7 +64,7 @@ def make_video_model(
         list(batch.keys())[:2] if isinstance(batch, dict) else batch._fields[:2]
     )
 
-    session_shape_dict = get_dims_for_loader_dict(dataloaders)
+    session_shape_dict = get_dims_for_loader_dict(dataloaders, deeplake_ds)
     n_neurons_dict = {k: v[out_name][1] for k, v in session_shape_dict.items()}
     input_channels = [v[in_name][1] for v in session_shape_dict.values()]
 
@@ -127,9 +125,14 @@ def make_video_model(
             k: get_module_output(core, v)[1:] for k, v in session_shape_dict_2d.items()
         }
 
-    mean_activity_dict = {
-        k: next(iter(dataloaders[k]))[1].mean(0).mean(-1) for k in dataloaders.keys()
-    }
+    if deeplake_ds:
+        mean_activity_dict = {
+            k: next(iter(dataloaders[k]))['responses'].mean(0).mean(-1) for k in dataloaders.keys()
+        }
+    else:
+        mean_activity_dict = {
+            k: next(iter(dataloaders[k]))[1].mean(0).mean(-1) for k in dataloaders.keys()
+        }
 
     readout_dict["in_shape_dict"] = in_shapes_dict
     readout_dict["n_neurons_dict"] = n_neurons_dict
@@ -137,7 +140,7 @@ def make_video_model(
 
     if readout_type == "gaussian":
         grid_mean_predictor, grid_mean_predictor_type, source_grids = prepare_grid(
-            readout_dict["grid_mean_predictor"], dataloaders
+            readout_dict["grid_mean_predictor"], dataloaders, deeplake_ds
         )
 
         readout_dict["mean_activity_dict"] = mean_activity_dict
@@ -150,8 +153,11 @@ def make_video_model(
         if readout_dict["bias"]:
             mean_activity_dict = {}
             for key, value in dataloaders.items():
-                _, targets = next(iter(value))[:2]
-                mean_activity_dict[key] = targets.mean(0)
+                if deeplake_ds:
+                    targets = next(iter(value))['responses']
+                else:
+                    targets = next(iter(value))[2]
+                mean_activity_dict[key] = targets.mean(0).mean(-1)
             readout_dict["mean_activity_dict"] = mean_activity_dict
         else:
             readout_dict["mean_activity_dict"] = None
