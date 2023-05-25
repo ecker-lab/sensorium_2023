@@ -1,7 +1,6 @@
 from operator import itemgetter
+
 import torch
-from nnfabrik.utility.nn_helpers import set_random_seed
-from torch import nn
 from neuralpredictors.layers.cores import (RotationEquivariant2dCore,
                                            Stacked2dCore)
 # imports for 3d cores and gru
@@ -9,9 +8,11 @@ from neuralpredictors.layers.cores.conv3d import Basic3dCore, Factorized3dCore
 from neuralpredictors.layers.rnn_modules.gru_module import GRU_Module
 from neuralpredictors.layers.shifters import MLPShifter, StaticAffine2dShifter
 from neuralpredictors.utils import get_module_output
+from nnfabrik.utility.nn_helpers import set_random_seed
+from torch import nn
 
 from .readouts import MultipleFullFactorized2d, MultipleFullGaussian2d
-from .utility import prepare_grid, get_dims_for_loader_dict
+from .utility import get_dims_for_loader_dict, prepare_grid
 from .video_encoder import VideoFiringRateEncoder
 
 
@@ -127,11 +128,13 @@ def make_video_model(
 
     if deeplake_ds:
         mean_activity_dict = {
-            k: next(iter(dataloaders[k]))['responses'].mean(0).mean(-1) for k in dataloaders.keys()
+            k: next(iter(dataloaders[k]))["responses"].mean(0).mean(-1)
+            for k in dataloaders.keys()
         }
     else:
         mean_activity_dict = {
-            k: next(iter(dataloaders[k]))[1].mean(0).mean(-1) for k in dataloaders.keys()
+            k: next(iter(dataloaders[k]))[1].mean(0).mean(-1)
+            for k in dataloaders.keys()
         }
 
     readout_dict["in_shape_dict"] = in_shapes_dict
@@ -154,7 +157,7 @@ def make_video_model(
             mean_activity_dict = {}
             for key, value in dataloaders.items():
                 if deeplake_ds:
-                    targets = next(iter(value))['responses']
+                    targets = next(iter(value))["responses"]
                 else:
                     targets = next(iter(value))[2]
                 mean_activity_dict[key] = targets.mean(0).mean(-1)

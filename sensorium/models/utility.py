@@ -1,5 +1,6 @@
 import copy
 
+
 def get_io_dims(data_loader, deeplake_ds):
     """
     ## adopted from nnfabrik - https://github.com/sinzlab/nnfabrik/blob/master/nnfabrik/utility/nn_helpers.py
@@ -26,7 +27,7 @@ def get_io_dims(data_loader, deeplake_ds):
     if deeplake_ds:
         res = {}
         for k in items.keys():
-            if k not in ['index', 'id', 'group', 'hash']:
+            if k not in ["index", "id", "group", "hash"]:
                 res[k] = items[k].shape
         return res
     else:
@@ -47,8 +48,9 @@ def get_dims_for_loader_dict(dataloaders, deeplake_ds):
 
     Returns:
         dict: A dict containing the result of calling `get_io_dims` for each entry of the input dict
-    """     
+    """
     return {k: get_io_dims(v, deeplake_ds) for k, v in dataloaders.items()}
+
 
 def prepare_grid(grid_mean_predictor, dataloaders, deeplake_ds):
     """
@@ -80,8 +82,11 @@ def prepare_grid(grid_mean_predictor, dataloaders, deeplake_ds):
             input_dim = grid_mean_predictor.pop("input_dimensions", 2)
             if deeplake_ds:
                 import deeplake
+
                 source_grids = {
-                    k: deeplake.load(f'hub://sinzlab/sensorium2023_{k}_train').info['cell_motor_coordinates'][:, :input_dim]
+                    k: deeplake.load(f"hub://sinzlab/sensorium2023_{k}_train").info[
+                        "cell_motor_coordinates"
+                    ][:, :input_dim]
                     for k, _ in dataloaders.items()
                 }
             else:

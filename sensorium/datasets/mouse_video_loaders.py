@@ -1,7 +1,4 @@
 import numpy as np
-from torch.utils.data import DataLoader
-from torch.utils.data.sampler import SubsetRandomSampler
-
 from neuralpredictors.data.datasets import MovieFileTreeDataset
 from neuralpredictors.data.samplers import SubsetSequentialSampler
 from neuralpredictors.data.transforms import (AddBehaviorAsChannels,
@@ -10,6 +7,8 @@ from neuralpredictors.data.transforms import (AddBehaviorAsChannels,
                                               ExpandChannels, NeuroNormalizer,
                                               ScaleInputs, SelectInputChannel,
                                               Subsample, Subsequence, ToTensor)
+from torch.utils.data import DataLoader
+from torch.utils.data.sampler import SubsetRandomSampler
 
 
 def mouse_video_loader(
@@ -93,12 +92,16 @@ def mouse_video_loader(
             ChangeChannelsOrder((1, 0), in_name="pupil_center"),
             ExpandChannels("videos"),
         ]
-        
+
         if include_behavior:
-            more_transforms.append(AddBehaviorAsChannels("videos", exclude_beh_channels=exclude_beh_channels))
+            more_transforms.append(
+                AddBehaviorAsChannels(
+                    "videos", exclude_beh_channels=exclude_beh_channels
+                )
+            )
         if include_pupil_centers and include_pupil_centers_as_channels:
             more_transforms.append(AddPupilCenterAsChannels("videos"))
-        
+
         more_transforms.append(ToTensor(cuda))
         more_transforms.insert(
             0, ScaleInputs(scale=scale, in_name="videos", channel_axis=-1)

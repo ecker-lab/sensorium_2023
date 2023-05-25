@@ -1,11 +1,14 @@
 import warnings
+
 import numpy as np
 import torch
 from neuralpredictors.measures.np_functions import corr
 from neuralpredictors.training import device_state
 
 
-def model_predictions(model, dataloader, data_key, device="cpu", skip=50, deeplake_ds=False):
+def model_predictions(
+    model, dataloader, data_key, device="cpu", skip=50, deeplake_ds=False
+):
     """
     computes model predictions for a given dataloader and a model
     Returns:
@@ -24,16 +27,22 @@ def model_predictions(model, dataloader, data_key, device="cpu", skip=50, deepla
         batch_kwargs = batch._asdict() if not isinstance(batch, dict) else batch
         if deeplake_ds:
             for k in batch_kwargs.keys():
-                if k not in ['id', 'index']:
-                    batch_kwargs[k] = torch.Tensor(np.asarray(batch_kwargs[k])).to(device) 
+                if k not in ["id", "index"]:
+                    batch_kwargs[k] = torch.Tensor(np.asarray(batch_kwargs[k])).to(
+                        device
+                    )
         with torch.no_grad():
             resp = responses.detach().cpu()[:, :, skip:]
             target = target + list(resp)
             with device_state(model, device):
-                out = (model(images.to(device), data_key=data_key, **batch_kwargs)
-                            .detach()
-                            .cpu()[:, -resp.shape[-1]:, :])
-                assert out.shape[1] == resp.shape[-1], f'model prediction is too short ({out.shape[1]} vs {resp.shape[-1]})'
+                out = (
+                    model(images.to(device), data_key=data_key, **batch_kwargs)
+                    .detach()
+                    .cpu()[:, -resp.shape[-1] :, :]
+                )
+                assert (
+                    out.shape[1] == resp.shape[-1]
+                ), f"model prediction is too short ({out.shape[1]} vs {resp.shape[-1]})"
                 output = output + list(out.permute(0, 2, 1))
 
     return target, output
@@ -47,7 +56,7 @@ def get_correlations(
     as_dict=False,
     per_neuron=True,
     deeplake_ds=False,
-    **kwargs
+    **kwargs,
 ):
     """
     Computes single-trial correlation between model prediction and true responses
@@ -65,7 +74,11 @@ def get_correlations(
     dl = dataloaders[tier] if tier is not None else dataloaders
     for k, v in dl.items():
         target, output = model_predictions(
-            dataloader=v, model=model, data_key=k, device=device, deeplake_ds=deeplake_ds,
+            dataloader=v,
+            model=model,
+            data_key=k,
+            device=device,
+            deeplake_ds=deeplake_ds,
         )
         target = np.concatenate(target, axis=1).T
         output = np.concatenate(output, axis=1).T

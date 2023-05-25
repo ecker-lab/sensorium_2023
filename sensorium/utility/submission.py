@@ -3,10 +3,9 @@ import os
 import numpy as np
 import pandas as pd
 import torch
-from nnfabrik.builder import get_data
-
 from neuralpredictors.data.datasets import FileTreeDataset
 from neuralpredictors.training import device_state, eval_state
+from nnfabrik.builder import get_data
 
 
 def model_predictions(model, dataloader, data_key, device="cpu"):

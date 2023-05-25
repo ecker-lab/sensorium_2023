@@ -4,11 +4,10 @@ from functools import partial
 import numpy as np
 import torch
 import wandb
-from nnfabrik.utility.nn_helpers import set_random_seed
-from tqdm import tqdm
-
 from neuralpredictors.measures import modules
 from neuralpredictors.training import LongCycler, early_stopping
+from nnfabrik.utility.nn_helpers import set_random_seed
+from tqdm import tqdm
 
 from ..utility import scores
 from ..utility.scores import get_correlations, get_poisson_loss
@@ -100,8 +99,8 @@ def standard_trainer(
             ) + model.readout.regularizer(data_key)
         if deeplake_ds:
             for k in kwargs.keys():
-                if k not in ['id', 'index']:
-                    kwargs[k] = torch.Tensor(np.asarray(kwargs[k])).to(device) 
+                if k not in ["id", "index"]:
+                    kwargs[k] = torch.Tensor(np.asarray(kwargs[k])).to(device)
         model_output = model(args[0].to(device), data_key=data_key, **kwargs)
         time_left = model_output.shape[1]
 
