@@ -18,11 +18,6 @@ def model_predictions(
 
     target, output = [], []
     for batch in dataloader:
-        images, responses = (
-            batch[:2]
-            if not isinstance(batch, dict)
-            else (batch["videos"], batch["responses"])
-        )
 
         batch_kwargs = batch._asdict() if not isinstance(batch, dict) else batch
         if deeplake_ds:
@@ -31,6 +26,15 @@ def model_predictions(
                     batch_kwargs[k] = torch.Tensor(np.asarray(batch_kwargs[k])).to(
                         device
                     )
+            images = batch_kwargs["videos"]
+            responses = batch_kwargs["responses"]
+        else:
+            images, responses = (
+                batch[:2]
+                if not isinstance(batch, dict)
+                else (batch["videos"], batch["responses"])
+            )
+            
         with torch.no_grad():
             resp = responses.detach().cpu()[:, :, skip:]
             target = target + list(resp)

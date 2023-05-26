@@ -240,6 +240,7 @@ def standard_trainer(
             device=device,
             as_dict=False,
             per_neuron=False,
+            deeplake_ds=deeplake_ds,
         )
         val_loss = full_objective(
             model,
@@ -273,7 +274,7 @@ def standard_trainer(
 
     # Compute avg validation and test correlation
     validation_correlation = get_correlations(
-        model, dataloaders["oracle"], device=device, as_dict=False, per_neuron=False
+        model, dataloaders["oracle"], device=device, as_dict=False, per_neuron=False, deeplake_ds=deeplake_ds,
     )
     print(f"\n\n FINAL validation_correlation {validation_correlation} \n\n")
 
