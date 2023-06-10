@@ -17,7 +17,7 @@ For more information about the competition, vist our [website](http://sensorium-
 The White paper, which describes the dataset and competition in detail will be pubished later./
 
 # Important Dates
-**June 1, 2023**: Start of the competition and data release.
+**June 12, 2023**: Start of the competition and data release.
 <br>**Sep 15, 2023**: Submission deadline.
 <br>**Sep 29, 2023**: Validation of all submitted scores completed. Preliminary winners are announced. Rank 1-3 in both competition tracks are contacted to provide the code for their submission.
 <br>**Oct 13, 2023**: Deadline for top-ranked entries to provide the code for their submission.
