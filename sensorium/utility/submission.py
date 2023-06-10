@@ -7,7 +7,8 @@ from neuralpredictors.training import device_state
 
 def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=None, track='main', skip=50, device='cpu'):    
     assert track == 'main' or track == 'ood', 'Track should be "main" or "ood"'
-    
+    if track == 'ood':
+        track = 'bonus'
     mice = list(dataloader[list(dataloader.keys())[0]].keys())
     
     if tier is None:
@@ -79,6 +80,8 @@ def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=No
             dataframes_pred.append(df) 
 
         #save file
+        if track == 'bonus':
+            track = 'ood'
         df = pd.concat(dataframes_pred, ignore_index=True)
         submission_filename = f"predictions_file_{tier}_{track}_track.parquet.brotli"
         save_path = os.path.join(path, submission_filename) if path is not None else submission_filename
