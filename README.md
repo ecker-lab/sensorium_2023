@@ -52,7 +52,7 @@ now, type in `localhost:10101` in your favorite browser, and you are ready to go
 <!-- ## **Competition example notebooks** -->
 We provide notebooks that illustrate the structure of our data, our baselines models, and how to make a submission to the competition.
 <br>[**Dataset tutorial**](notebooks/load_data_demo.ipynb): Shows the structure of the data and how to turn it into a PyTorch DataLoader.
-<br>[**Model tutorial**](notebooks/model_demo.ipynb): How to train and evaluate our baseline models and even more models.
+<br>[**Model tutorial**](notebooks/models_demo.ipynb): How to train and evaluate our baseline models and even more models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
 
 ## Submission comments
