@@ -5,7 +5,7 @@ import torch
 from neuralpredictors.training import device_state
 
 
-def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=None, track='main', skip=50):    
+def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=None, track='main', skip=50, device='cpu'):    
     assert track == 'main' or track == 'ood', 'Track should be "main" or "ood"'
     
     mice = list(dataloader[list(dataloader.keys())[0]].keys())
@@ -40,8 +40,11 @@ def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=No
             for idx in range(len(tiers)):
                 if tiers[idx] == tier:
                     if deeplake_ds:
-                        batch_kwargs = next(dl)
+                        batch_kwargs = next(ds)
                         length = batch_kwargs['videos'].shape[2] - skip
+                        for k in batch_kwargs.keys():
+                            if k not in ['id', 'index']:
+                                batch_kwargs[k] = batch_kwargs[k].to(device)
                     else:
                         batch = ds.__getitem__(idx)
                         batch_kwargs = batch._asdict() if not isinstance(batch, dict) else batch
