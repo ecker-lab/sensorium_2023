@@ -132,18 +132,19 @@ def mouse_video_loader(
         tier_array = dat2.trial_info.tiers
 
         for tier in keys:
-            subset_idx = np.where(tier_array == tier)[0]
+            if tier != 'none':
+                subset_idx = np.where(tier_array == tier)[0]
 
-            sampler = (
-                SubsetRandomSampler(subset_idx)
-                if tier == "train"
-                else SubsetSequentialSampler(subset_idx)
-            )
-            dataloaders[tier] = DataLoader(
-                dat2,
-                sampler=sampler,
-                batch_size=batch_size,
-            )
+                sampler = (
+                    SubsetRandomSampler(subset_idx)
+                    if tier == "train"
+                    else SubsetSequentialSampler(subset_idx)
+                )
+                dataloaders[tier] = DataLoader(
+                    dat2,
+                    sampler=sampler,
+                    batch_size=batch_size,
+                )
 
         dataset_name = path.split("/")[-2]
         for k, v in dataloaders.items():
