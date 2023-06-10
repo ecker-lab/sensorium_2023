@@ -84,7 +84,7 @@ def prepare_grid(grid_mean_predictor, dataloaders, deeplake_ds):
                 import deeplake
 
                 source_grids = {
-                    k: deeplake.load(f"hub://sinzlab/sensorium2023_{k}_train").info[
+                    k: deeplake.load(f"hub://sinzlab/Sensorium_2023_{k}_train").info[
                         "cell_motor_coordinates"
                     ][:, :input_dim]
                     for k, _ in dataloaders.items()
