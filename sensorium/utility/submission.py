@@ -31,7 +31,7 @@ def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=No
             if deeplake_ds:
                 import deeplake
                 
-                neuron_ids = deeplake.load(f'hub://sinzlab/sensorium2023_{m}_train').info['neuron_ids']
+                neuron_ids = deeplake.load(f'hub://sinzlab/Sensorium_2023_{m}_train').info['neuron_ids']
                 tiers = [tier] * len(dataloader[tier][m].dataset)
                 ds = iter(dataloader[tier][m])
             else:
