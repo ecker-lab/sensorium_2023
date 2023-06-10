@@ -27,7 +27,6 @@ def mouse_video_loader(
     include_pupil_centers_as_channels=False,
     scale=1,
     to_cut=True,
-    exclude_beh_channels=None,
 ):
     """
     Symplified version of the sensorium mouse_loaders.py
@@ -96,7 +95,7 @@ def mouse_video_loader(
         if include_behavior:
             more_transforms.append(
                 AddBehaviorAsChannels(
-                    "videos", exclude_beh_channels=exclude_beh_channels
+                    "videos"
                 )
             )
         if include_pupil_centers and include_pupil_centers_as_channels:
