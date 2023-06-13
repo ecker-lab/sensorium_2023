@@ -54,6 +54,7 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 <br>[**Dataset tutorial**](notebooks/load_data_demo.ipynb): Shows the structure of the data and how to turn it into a PyTorch DataLoader.
 <br>[**Model tutorial**](notebooks/models_demo.ipynb): How to train and evaluate our baseline models and even more models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
+**To download data as .zip, click [here](https://gin.g-node.org/pollytur/sensorium_2023_data)**
 
 ## Submission comments
 
