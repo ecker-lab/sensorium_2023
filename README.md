@@ -60,7 +60,7 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 
 Participants should submit a zip file with 2 files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test correspondingly. For the bonus track please replace `main` with `ood` like this : `predictions_final_ood.parquet.brotli`. 
 
-If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `predictions`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions.
+If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `prediction`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions.
 
 If you use pandas, here is a toy example how to save the data:
 
@@ -72,7 +72,7 @@ data = [
 ]
 
 
-df = pd.DataFrame.from_records(data, columns =['mouse', 'trial_indices', 'predictions', 'neuron_ids'])
+df = pd.DataFrame.from_records(data, columns =['mouse', 'trial_indices', 'prediction', 'neuron_ids'])
 df = pd.concat(dataframes_pred, ignore_index=True)
 submission_filename = f"predictions_file_{tier}_{track}_track.parquet.brotli"
 save_path = os.path.join(path, submission_filename) if path is not None else submission_filename
