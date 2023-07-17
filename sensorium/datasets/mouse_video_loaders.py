@@ -50,7 +50,7 @@ def mouse_video_loader(
     Returns:
         dict: dictionary of dictionaries where the first level keys are 'train', 'validation', and 'test', and second level keys are data_keys.
     """
-
+    assert frames > 50, 'Frames must be higher than 50'
     data_keys = [
         "videos",
         "responses",

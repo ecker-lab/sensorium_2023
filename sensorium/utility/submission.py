@@ -52,7 +52,7 @@ def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=No
                         for bk, bv in batch_kwargs.items():
                             batch_kwargs[bk] = torch.unsqueeze(bv, 0)
 
-                        length = batch[0].shape[2] - skip
+                        length = batch[0].shape[1] - skip
                         
                     if deeplake_ds:
                         trial_indices = trial_indices + batch_kwargs['id']
