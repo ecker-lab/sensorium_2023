@@ -78,19 +78,25 @@ def mouse_video_loader(
             ),
             ChangeChannelsOrder((2, 0, 1), in_name="videos"),
             ChangeChannelsOrder((1, 0), in_name="responses"),
-            ChangeChannelsOrder((1, 0), in_name="behavior"),
-            ChangeChannelsOrder((1, 0), in_name="pupil_center"),
         ]
+        if include_behavior:
+            more_transforms.append( ChangeChannelsOrder((1, 0), in_name="behavior") )
+        if include_pupil_centers:
+            more_transforms.append( ChangeChannelsOrder((1, 0), in_name="pupil_center") )
+        
         if to_cut:
             more_transforms.append(
                 Subsequence(frames=frames, channel_first=(), offset=offset)
             )
         more_transforms = more_transforms + [
             ChangeChannelsOrder((1, 0), in_name="responses"),
-            ChangeChannelsOrder((1, 0), in_name="behavior"),
-            ChangeChannelsOrder((1, 0), in_name="pupil_center"),
             ExpandChannels("videos"),
         ]
+        if include_behavior:
+            more_transforms.append( ChangeChannelsOrder((1, 0), in_name="behavior") )
+        if include_pupil_centers:
+            more_transforms.append( ChangeChannelsOrder((1, 0), in_name="pupil_center") )
+
 
         if include_behavior:
             more_transforms.append(
