@@ -60,7 +60,7 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 
 Due to file size restrictions the submission for main track and bonus track differ slightly.
 
-**Main track:** Participants should submit a zip file with two files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test, respectively. These two files should be directly in the zip file and be zipped within a folder. 
+**Main track:** Participants should submit a zip file with two files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test, respectively. These two files should be directly in the zip file and **not** be zipped with any folders in between. 
 
 **Bonus track:** For the bonus track please name the prediction files like this: `predictions_live_test_bonus_ood.parquet.brotli` and `predictions_final_test_bonus_ood.parquet.brotli`. Please zip files for both `live` and `final` submissions separately and upload them separately for the two different competition stages (`live` and `final` tabs on the submission page). We need to do this to avoid uploading files over 5 GB.
 
