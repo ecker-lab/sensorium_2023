@@ -58,9 +58,9 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 
 ## Submission comments
 
-Participants should submit a zip file with 2 files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test correspondingly. For the bonus track please replace `main` with `ood` like this : `predictions_final_ood.parquet.brotli`. 
+Participants should submit a zip file with 2 files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test correspondingly. For the bonus track please replace name like this : `predictions_live_test_bonus_ood.parquet.brotli` and `predictions_final_test_bonus_ood.parquet.brotli`. For `main` track, please zip files for both `live` and `final` together by subselecting them (not the folder zip). The submission should be less then 5gb and should contain 2 zip `.brotli.zip` files inside. For the `bonus` track , please zip files for both `live` and `final` submissions separately and load them separately for different competition stages (`live` and `final tabs on the submission page`). This is done to avoid loading too big files (over 5 Gb).
 
-If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `prediction`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions.
+If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `prediction`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions. 
 
 If you use pandas, here is a toy example how to save the data:
 
