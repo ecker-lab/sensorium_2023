@@ -58,9 +58,13 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 
 ## Submission comments
 
-Participants should submit a zip file with 2 files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test correspondingly. For the bonus track please replace name like this : `predictions_live_test_bonus_ood.parquet.brotli` and `predictions_final_test_bonus_ood.parquet.brotli`. For `main` track, please zip files for both `live` and `final` together by subselecting them (not the folder zip). The submission should be less then 5gb and should contain 2 zip `.brotli.zip` files inside. For the `bonus` track , please zip files for both `live` and `final` submissions separately and load them separately for different competition stages (`live` and `final tabs on the submission page`). This is done to avoid loading too big files (over 5 Gb).
+Due to file size restrictions the submission for main track and bonus track differ slightly.
 
-If you do not want to use API for the competition submission,here are some guides. Each file should contains 4 columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `prediction`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simple the order of the neurons in the predictions. 
+**Main track:** Participants should submit a zip file with two files in it : `predictions_live_main.parquet.brotli` and `predictions_final_main.parquet.brotli` for the live and final test, respectively. These two files should be directly in the zip file and be zipped within a folder. 
+
+**Bonus track:** For the bonus track please name the prediction files like this: `predictions_live_test_bonus_ood.parquet.brotli` and `predictions_final_test_bonus_ood.parquet.brotli`. Please zip files for both `live` and `final` submissions separately and upload them separately for the two different competition stages (`live` and `final tabs on the submission page`). We need to do this to avoid uploading files over 5 GB.
+
+If you do not want to use our API for the competition submission, here are some guidelines: Each file should contains four columns: `mouse` with the session name, `trial_indices` (like '1.npy'), `prediction`, where each entity in the predictions column is a list of lists with shape = (number or neurons, n_frames), where n_frames is the last n_frames frames for the video, excluding the first 50 frames (like for 300 frames in video we need predictions only for the last 250), and  `neuron_ids`, which is simply the order of the neurons in the predictions. 
 
 If you use pandas, here is a toy example how to save the data:
 
@@ -72,7 +76,7 @@ data = [
 ]
 
 
-df = pd.DataFrame.from_records(data, columns =['mouse', 'trial_indices', 'prediction', 'neuron_ids'])
+df = pd.DataFrame.from_records(data, columns=['mouse', 'trial_indices', 'prediction', 'neuron_ids'])
 df = pd.concat(dataframes_pred, ignore_index=True)
 submission_filename = f"predictions_file_{tier}_{track}_track.parquet.brotli"
 save_path = os.path.join(path, submission_filename) if path is not None else submission_filename
