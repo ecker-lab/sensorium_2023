@@ -107,10 +107,10 @@ def mouse_video_loader(
         if include_pupil_centers and include_pupil_centers_as_channels:
             more_transforms.append(AddPupilCenterAsChannels("videos"))
 
-        more_transforms.append(ToTensor(cuda))
-        more_transforms.insert(
-            0, ScaleInputs(scale=scale, in_name="videos", channel_axis=-1)
+        more_transforms.append(
+            ScaleInputs(scale=scale, in_name="videos", channel_axis=-1)
         )
+        more_transforms.append(ToTensor(cuda))
         if normalize:
             try:
                 more_transforms.insert(
