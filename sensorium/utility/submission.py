@@ -86,5 +86,7 @@ def generate_submission(dataloader, model, deeplake_ds=False, path=None, tier=No
         submission_filename = f"predictions_file_{tier}_{track}_track.parquet.brotli"
         save_path = os.path.join(path, submission_filename) if path is not None else submission_filename
         df.to_parquet(save_path, compression='brotli', engine='pyarrow', index=False)
-        print(f"Submission file saved for tier: {tier}, track {track}. Saved in: {save_path}")              
+        print(f"Submission file saved for tier: {tier}, track {track}. Saved in: {save_path}")
+        if track == 'ood':
+            track = 'bonus'
         
