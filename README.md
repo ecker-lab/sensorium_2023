@@ -27,32 +27,16 @@ The White paper, which describes the dataset and competition in detail will be p
 
 This is a starter kit repo. The links for data would be published upon the competition start. Participants would have access to zip archieves or to the Deep Lake dataloaders, not to store the datasets locally.
 
-<!-- Below we provide a step-by-step guide for getting started with the competition. -->
-<!-- 
-## 1. Pre-requisites
-- install [**docker**](https://docs.docker.com/get-docker/) and [**docker-compose**](https://docs.docker.com/compose/install/)
-- install git
-- clone the repo via `git clone https://github.com/sinzlab/sensorium.git`
-
-## 2. Download neural data
-
-You can download the data from [https://gin.g-node.org/cajal/Sensorium2022](https://gin.g-node.org/cajal/Sensorium2022) and place it in `sensorium/notebooks/data`.
-**Note:** Downloading the files all at once as a directory does lead to unfortunate errors. Thus, all datastes have to be downloaded individually.
-
-## 3. Run the example notebooks
-
-### **Start Jupyterlab environment**
+To use the conda environment please do the following:
 ```
-cd sensorium/
-docker-compose run -d -p 10101:8888 jupyterlab
+conda env create -f env.yml
+conda activate sensroium_2023
 ```
-now, type in `localhost:10101` in your favorite browser, and you are ready to go!
- -->
 
-<!-- ## **Competition example notebooks** -->
 We provide notebooks that illustrate the structure of our data, our baselines models, and how to make a submission to the competition.
 <br>[**Dataset tutorial**](notebooks/load_data_demo.ipynb): Shows the structure of the data and how to turn it into a PyTorch DataLoader.
-<br>[**Model tutorial**](notebooks/models_demo.ipynb): How to train and evaluate our baseline models and even more models.
+<br>[**Model tutorial**](notebooks/models_demo.ipynb): Provides introduction to the different models
+<br>[**Benchmark training**](notebooks/benchmarks_training.ipynb): How to train and evaluate our baseline models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
 **To download data as .zip, click [here](https://gin.g-node.org/pollytur/Sensorium2023Data)**
 
