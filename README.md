@@ -38,7 +38,7 @@ We provide notebooks that illustrate the structure of our data, our baselines mo
 <br>[**Model tutorial**](notebooks/models_demo.ipynb): Provides introduction to the different models
 <br>[**Benchmark training**](notebooks/benchmarks_training.ipynb): How to train and evaluate our baseline models.
 <!-- <br>[**Submission tutorial**](notebooks/submission_tutorial/): Use our API to make a submission to our competition. -->
-**To download data as .zip, click [here](https://gin.g-node.org/pollytur/Sensorium2023Data)**
+**To download data as .zip, click [here](https://gin.g-node.org/pollytur/sensorium_2023_dataset)**
 
 ## Submission comments
 
