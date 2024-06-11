@@ -18,10 +18,10 @@ The White paper, which describes the dataset and competition in detail will be p
 
 # Important Dates
 **June 12, 2023**: Start of the competition and data release.
-<br>**Sep 15, 2023**: Submission deadline.
-<br>**Sep 29, 2023**: Validation of all submitted scores completed. Preliminary winners are announced. Rank 1-3 in both competition tracks are contacted to provide the code for their submission.
-<br>**Oct 13, 2023**: Deadline for top-ranked entries to provide the code for their submission.
-<br>**Oct 23, 2023**: Winners contacted to contribute to the competition summary write-up.
+<br>**Oct 15, 2023**: Submission deadline.
+<br>**Oct 17, 2023**: Validation of all submitted scores completed. Preliminary winners are announced. Rank 1-3 in both competition tracks are contacted to provide the code for their submission.
+<br>**Oct 27, 2023**: Deadline for top-ranked entries to provide the code for their submission for validation.
+<br>**Oct 30, 2023**: Winners annonced and contacted to contribute to the competition summary write-up.
 
 # Starter-kit
 
