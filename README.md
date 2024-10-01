@@ -68,3 +68,29 @@ df.to_parquet(save_path, compression='brotli', engine='pyarrow', index=False)
 ```
 
 If you have any questions, feel free to reach out to us (Contact section on our [website](http://sensorium-competition.net/)), or raise an issue here on GitHub!
+## Cite
+If you are using the dataset, code and/or winners suggestions, please cite the whitepaper and/or the competition retrospective.  
+[Whitepaper](https://arxiv.org/abs/2305.19654)
+```
+@misc{turishcheva2024dynamicsensoriumcompetitionpredicting,
+      title={The Dynamic Sensorium competition for predicting large-scale mouse visual cortex activity from videos}, 
+      author={Polina Turishcheva and Paul G. Fahey and Laura Hansel and Rachel Froebe and Kayla Ponder and Michaela Vystrčilová and Konstantin F. Willeke and Mohammad Bashiri and Eric Wang and Zhiwei Ding and Andreas S. Tolias and Fabian H. Sinz and Alexander S. Ecker},
+      year={2024},
+      eprint={2305.19654},
+      archivePrefix={arXiv},
+      primaryClass={q-bio.NC},
+      url={https://arxiv.org/abs/2305.19654}, 
+}
+```
+[Retrospective](https://arxiv.org/abs/2407.09100)
+```
+@misc{turishcheva2024retrospectivedynamicsensoriumcompetition,
+      title={Retrospective for the Dynamic Sensorium Competition for predicting large-scale mouse primary visual cortex activity from videos}, 
+      author={Polina Turishcheva and Paul G. Fahey and Michaela Vystrčilová and Laura Hansel and Rachel Froebe and Kayla Ponder and Yongrong Qiu and Konstantin F. Willeke and Mohammad Bashiri and Ruslan Baikulov and Yu Zhu and Lei Ma and Shan Yu and Tiejun Huang and Bryan M. Li and Wolf De Wulf and Nina Kudryashova and Matthias H. Hennig and Nathalie L. Rochefort and Arno Onken and Eric Wang and Zhiwei Ding and Andreas S. Tolias and Fabian H. Sinz and Alexander S Ecker},
+      year={2024},
+      eprint={2407.09100},
+      archivePrefix={arXiv},
+      primaryClass={q-bio.NC},
+      url={https://arxiv.org/abs/2407.09100}, 
+}
+```
