@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sensorium_2023"
+version = "0.0.0"
+description = "Code base for SENSORIUM challenge."
+authors = [
+    { name = "sinzlab" }
+]
+dependencies = [
+    "neuralpredictors==0.3.0",
+    "nnfabrik==0.2.1",
+    "scikit-image>=0.19.1",
+    "lipstick",
+    "numpy>=1.22.0"
+]
+license = {text = "MIT"} 
+
+[tool.setuptools]
+packages = { find = {} }
